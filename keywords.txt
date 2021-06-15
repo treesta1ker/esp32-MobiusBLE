@@ -1,0 +1,66 @@
+#######################################
+# Syntax Coloring Map For MobiusBLE
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+MobiusCRC	KEYWORD1
+MobiusDevice	KEYWORD1
+MobiusDeviceEvent	KEYWORD1
+MobiusDeviceEventListener	KEYWORD1
+DefaultDeviceEventListener	KEYWORD1
+ArduinoSerialDeviceEventListener	KEYWORD1
+FastLEDDeviceEventListener	KEYWORD1
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+crc16	KEYWORD2
+
+init	KEYWORD2
+scanForMobiusDevices	KEYWORD2
+connect	KEYWORD2
+disconnect	KEYWORD2
+getCurrentScene	KEYWORD2
+setScene	KEYWORD2
+setFeedScene	KEYWORD2
+setSchedule	KEYWORD2
+runSchedule	KEYWORD2
+
+onEvent	KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+CRC16_TABLE	LITERAL1
+
+GENERAL_SERVICE	LITERAL1
+REQUEST_CHARACTERISTIC	LITERAL1
+RESPONSE_CHARACTERISTIC_1	LITERAL1
+RESPONSE_CHARACTERISTIC_2	LITERAL1
+
+OP_GROUP_REQUEST	LITERAL1
+OP_GROUP_CONFIRM	LITERAL1
+OP_CODE_GET	LITERAL1
+OP_CODE_SET	LITERAL1
+ATTRIBUTE_SCENE	LITERAL1
+ATTRIBUTE_OPERATION_STATE	LITERAL1
+ATTRIBUTE_CURRENT_SCENE	LITERAL1
+RESPONSE_DATA_SUCCESSFUL	LITERAL1
+FEED_SCENE_ID	LITERAL1
+OPERATION_STATE_SCHEDULE	LITERAL1
+
+scanning_begin	LITERAL1
+scanning_end	LITERAL1
+connection_begin	LITERAL1
+connection_failure	LITERAL1
+connection_successful	LITERAL1
+notification_received	LITERAL1
+request_successful	LITERAL1
+request_failure	LITERAL1
+response_successful	LITERAL1
+response_failure	LITERAL1
+
