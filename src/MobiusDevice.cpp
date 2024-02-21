@@ -27,23 +27,6 @@ static const char* LOG_TAG = "MobiusDevice";
  */
 uint8_t MobiusDevice::MobiusDeviceScanCallbacks::_expectedDevices = 0;
 uint8_t MobiusDevice::MobiusDeviceScanCallbacks::_foundDevices = 0;
-/**!
- * Called for each advertising BLE server.
- */
-void MobiusDevice::MobiusDeviceScanCallbacks::onResult(BLEAdvertisedDevice advertisedDevice) {
-    std::string deviceString = advertisedDevice.toString();
-    ESP_LOGD(LOG_TAG, "- BLE Advertised Device found: %s", deviceString.c_str());
-    // found a device, so check for the service
-    if (advertisedDevice.haveServiceUUID() && advertisedDevice.isAdvertisingService(Mobius::GENERAL_SERVICE)) {
-        // update the number of Mobius devices found
-        _foundDevices++;
-        ESP_LOGD(LOG_TAG, "- Mobius BLE device found: %s", deviceString.c_str());
-        if (_foundDevices >= _expectedDevices) {
-            ESP_LOGD(LOG_TAG, "- Stopping scanner early");
-            BLEDevice::getScan()->stop();
-        }
-    }
-}
 
 // static MobiusDevice variables
 MobiusDeviceEventListener* MobiusDevice::_listener = nullptr;
@@ -209,7 +192,7 @@ bool MobiusDevice::connect() {
     if (nullptr == remoteService) {
         ESP_LOGW(LOG_TAG, "- Failed to find service on %s", addressString.c_str());
         client->disconnect();
-        delete(client);
+        NimBLEDevice::deleteClient(client);
         MobiusDevice::_listener->onEvent(MobiusDeviceEvent::connection_failure);
     } else {
         // connected to the device with general service
@@ -221,7 +204,7 @@ bool MobiusDevice::connect() {
         } else {
             ESP_LOGW(LOG_TAG, "- Failed to connect to characteristics");
             MobiusDevice::_listener->onEvent(MobiusDeviceEvent::connection_failure);
-            delete(client);
+            NimBLEDevice::deleteClient(client);
         }
     }
     return (nullptr != _client);
@@ -235,7 +218,7 @@ void MobiusDevice::disconnect() {
     if (_client) {
         ESP_LOGD(LOG_TAG, "- Disconnecting from client");
         _client->disconnect();
-        delete(_client);
+        NimBLEDevice::deleteClient(_client);
         // destroying a client destroys the services
         // and destroying a service destroys the characteristics
         _client = nullptr;
