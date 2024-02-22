@@ -6,9 +6,9 @@
 #define _MobiusDevice_h
 
 #include <cstdint>
-#include <BLEDevice.h>
-#include <BLEScan.h>
-#include <BLEAdvertisedDevice.h>
+#include <NimBLEDevice.h>
+#include <NimBLEScan.h>
+#include <NimBLEAdvertisedDevice.h>
 
 #include "MobiusDeviceEventListener.h"
 
@@ -164,7 +164,20 @@ private:
         /*!
          * Called for each advertising BLE server.
          */
-        void onResult(BLEAdvertisedDevice advertisedDevice);
+        void onResult(NimBLEAdvertisedDevice* advertisedDevice) override {
+            std::string deviceString = advertisedDevice->toString();
+            ESP_LOGD(LOG_TAG, "- BLE Advertised Device found: %s", deviceString.c_str());
+            // found a device, so check for the service
+            if (advertisedDevice->haveServiceUUID() && advertisedDevice->isAdvertisingService(Mobius::GENERAL_SERVICE)) {
+                // update the number of Mobius devices found
+                _foundDevices++;
+                ESP_LOGD(LOG_TAG, "- Mobius BLE device found: %s", deviceString.c_str());
+                if (_foundDevices >= _expectedDevices) {
+                    ESP_LOGD(LOG_TAG, "- Stopping scanner early");
+                    BLEDevice::getScan()->stop();
+                }
+            }
+        }
     };
 
 
